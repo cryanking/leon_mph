@@ -3,16 +3,27 @@
 # Multiple imputation for missing data: individual level covariates
 
 # load packages
-library(readr)
-require(dplyr)
+.libPaths( c( "/root/R/x86_64-pc-linux-gnu-library/4.3/" , .libPaths() ) )
+library(groundhog) 
+set.groundhog.folder('/root/R_groundhog/')
+groundhog.library(c(
+"dplyr" ,
+"magrittr" ,
+"lubridate" ,
+"readr" ,
+"mitml" 
+) , '2024-01-15')
+
 
 # set seed, warning, and working directory
 set.seed(123)
 options(warn = 1)
-setwd("C:/Users/leona/Box/Research & Publications/ASOS dataset/")
+
+## RIS is kind of wierd in that the storage directory historically does not like how git manages files. Your home directory on RIS is limited to  (I think) 5 GB of space, which is usually adequate for code.
+setwd("/code/")
 
 # load dataset
-ASOS_data <- read.csv("C:/Users/leona/Box/Research & Publications/ASOS dataset/fake_asos_ltd.csv")
+ASOS_data <- read_csv("/code/fake_asos_ltd.csv")
 
 # change all variables to factor or numeric
 factor.cols <- c("country", "gender", "smoker", "asa", "black_ethnicity", 
@@ -50,7 +61,6 @@ ASOS_compl_death_dta <- ASOS_data[!(ASOS_data$status_hosp_discharge %in% NA),]
 
 # MI with mitml package
 # install.packages("mitml")
-library(mitml)
 
 fml <- X + country + age + gender + smoker + asa + black_ethnicity + 
 chronic_comorbid___1 + chronic_comorbid___2 + chronic_comorbid___3 + 
